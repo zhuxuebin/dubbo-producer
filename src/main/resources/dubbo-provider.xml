@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd"
+       default-lazy-init="false">
+
+    <bean id="springservice" class="com.dubbo.service.impl.TestImpl"></bean>
+    <bean id="fooservice" class="com.dubbo.service.impl.FooServiceImpl"/>
+    <bean id="barservice" class="com.dubbo.service.impl.BarServiceImpl"></bean>
+    <bean id="callbackService" class="com.dubbo.service.impl.CallbackServiceImpl"/>
+    <!--监听回调-->
+    <bean id="demoService" class="com.dubbo.service.impl.DemoServiceImpl" />
+
+    <!--提供方应用名称信息，这个相当于起一个名字，我们dubbo管理页面比较清晰是哪个应用暴露出来的 -->
+    <dubbo:application name="dubbo_provider"></dubbo:application>
+
+    <!--使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181" check="false" subscribe="false" register=""></dubbo:registry>
+
+    <!--要暴露的服务接口 -->
+    <dubbo:service interface="com.dubbo.service.Test" ref="springservice"/>
+    <dubbo:service interface="com.dubbo.service.FooService" ref="fooservice"/>
+    <dubbo:service interface="com.dubbo.service.BarService" ref="barservice"/>
+    <dubbo:service interface="com.dubbo.service.CallbackService" ref="callbackService" connections="1" callbacks="1000">
+        <dubbo:method name="addListener">
+            <dubbo:argument index="1" callback="true" />
+            <!--也可以通过指定类型的方式-->
+            <!--<dubbo:argument type="com.demo.CallbackListener" callback="true" />-->
+        </dubbo:method>
+    </dubbo:service>
+    <dubbo:service interface="com.dubbo.service.DemoService" ref="demoService" version="1.0.0" group="cn"/>
+
+</beans>
