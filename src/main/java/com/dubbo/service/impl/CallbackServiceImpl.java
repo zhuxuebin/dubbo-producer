@@ -4,9 +4,9 @@ package com.dubbo.service.impl;
  * Created by 01368080 on 2017/4/28.
  */
 
+
+import com.dubbo.service.CallbackListener;
 import com.dubbo.service.CallbackService;
-import com.dubbo.service.DemoService;
-import com.dubbo.service.FooService;
 
 import java.util.Map;
 
@@ -17,14 +17,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CallbackServiceImpl implements CallbackService {
 
-    private final Map<String, FooService.CallbackListener> listeners = new ConcurrentHashMap<String, FooService.CallbackListener>();
+    private final Map<String, CallbackListener> listeners = new ConcurrentHashMap<String,CallbackListener>();
 
     public CallbackServiceImpl() {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 while(true) {
                     try {
-                        for(Map.Entry<String, FooService.CallbackListener> entry : listeners.entrySet()){
+                        for(Map.Entry<String, CallbackListener> entry : listeners.entrySet()){
                             try {
                                 entry.getValue().changed(getChanged(entry.getKey()));
                             } catch (Throwable t) {
@@ -42,7 +42,7 @@ public class CallbackServiceImpl implements CallbackService {
         t.start();
     }
 
-    public void addListener(String key, FooService.CallbackListener listener) {
+    public void addListener(String key,CallbackListener listener) {
         listeners.put(key, listener);
         listener.changed(getChanged(key)); // 发送变更通知
     }
