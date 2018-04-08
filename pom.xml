@@ -22,7 +22,7 @@
 
     <!-- 中间接口，根据你的情况进行修改 -->
     <!--<dependency>-->
-      <!--<groupId>com.dubbo.service/groupId>-->
+      <!--<groupId>com.dubbo.service</groupId>-->
       <!--<artifactId>Test</artifactId>-->
       <!--<version>0.0.1</version>-->
     <!--</dependency>-->
