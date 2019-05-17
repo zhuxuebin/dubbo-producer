@@ -8,12 +8,14 @@
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
        default-lazy-init="false">
 
-    <!--<bean id="springservice" class="com.dubbo.service.impl.TestImpl"></bean>-->
+    <bean id="springservice" class="com.dubbo.service.impl.TestImpl"></bean>
     <bean id="fooservice" class="com.dubbo.service.impl.FooServiceImpl"/>
     <bean id="barservice" class="com.dubbo.service.impl.BarServiceImpl"></bean>
     <bean id="callbackService" class="com.dubbo.service.impl.CallbackServiceImpl"/>
     <!--监听回调-->
     <bean id="demoService" class="com.dubbo.service.impl.DemoServiceImpl" />
+    <!--提供者异步执行-->
+    <bean id="asyncService" class="com.dubbo.service.impl.AsyncServiceImpl" />
 
     <!--提供方应用名称信息，这个相当于起一个名字，我们dubbo管理页面比较清晰是哪个应用暴露出来的 -->
     <dubbo:application name="dubbo_provider"></dubbo:application>
@@ -22,7 +24,7 @@
     <dubbo:registry address="zookeeper://127.0.0.1:2181" check="false" subscribe="false" register=""></dubbo:registry>
 
     <!--要暴露的服务接口 -->
-    <!--<dubbo:service interface="com.dubbo.service.Test" ref="springservice"/>-->
+    <dubbo:service interface="com.dubbo.service.Test" ref="springservice"/>
     <dubbo:service interface="com.dubbo.service.FooService" ref="fooservice"/>
     <dubbo:service interface="com.dubbo.service.BarService" ref="barservice"/>
     <dubbo:service interface="com.dubbo.service.CallbackService" ref="callbackService" connections="1" callbacks="1000">
@@ -34,5 +36,5 @@
     </dubbo:service>
     <dubbo:service interface="com.dubbo.service.DemoService" ref="demoService" version="1.0.0" group="cn"/>
 
-    <dubbo:annotation package="com.dubbo.service"/>
+    <dubbo:service interface="com.dubbo.service.AsyncService" ref="asyncService" />
 </beans>
